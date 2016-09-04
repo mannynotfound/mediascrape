@@ -205,7 +205,6 @@ def parse_media(items_html):
     try:
         markup = lh.fromstring(items_html.replace('\n', '').encode('unicode-escape'))
     except lxml.etree.ParserError as e:
-        print('LXML PARSE ERROR!', e)
         return []
 
     media = []
