@@ -101,6 +101,8 @@ def _parse_tweet(tweetElement):
         tweet['user']['id_str'] = content_div.get('data-user-id')
         tweet['user']['name'] = content_div.get('data-name')
         tweet['user']['screen_name'] = content_div.get('data-screen-name')
+    else:
+        return None
 
     reply_a = content_div.cssselect('div.tweet-context a.js-user-profile-link')
     if len(reply_a) > 0:
@@ -213,7 +215,8 @@ def parse_media(items_html):
         if 'data-item-id' not in li.attrib:
             continue
         tweet = _parse_tweet(li)
-        media.append(tweet)
+        if tweet:
+            media.append(tweet)
 
     return media
 

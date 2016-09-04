@@ -4,12 +4,12 @@ import urllib.request
 import argparse
 
 def mediascrape(user):
-    TitterPageIterator = TwitterMediaSearch.TwitterPager(title = user).get_iterator(user)
+    TwitterPageIterator = TwitterMediaSearch.TwitterPager(title = user).get_iterator(user)
 
     all_media = []
     count = 0
 
-    for page in TitterPageIterator:
+    for page in TwitterPageIterator:
         for media in page['media']:
             print(count, ' ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– ')
             print(media)
