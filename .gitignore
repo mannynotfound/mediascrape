@@ -1,0 +1,8 @@
+data/*
+media/*
+models/*
+!data/empty.json
+!media/empty.json
+!models/empty.txt
+config*
+accounts*
