@@ -33,4 +33,4 @@ this will save all files to a directory of `/media/[user]/*`
 experimental script to find the same images posted in different tweets, possibly
 suggesting the image is of meme interest
 
-`python3 memefinder.py -d [optional directory] -x [show cross post only]`
+`python memefinder.py -d [optional directory] -x [show cross post only]`

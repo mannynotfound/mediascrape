@@ -1,5 +1,3 @@
-#!/usr/bin/python
-
 import hashlib
 import os
 import argparse
