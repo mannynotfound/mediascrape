@@ -1,12 +1,14 @@
 # mediascrape
 
-Download a Twitter user's media easily
+Download a Twitter user's media easily, no API keys needed.
 
 <p align="center">
   <img width="80%" src="cover.png" />
 </p>
 
-## Usage
+mediascrape requires no API credentials and instead relies on public endpoints combined with HTML parsing from [lxml](http://lxml.de/) to extract data.
+
+## usage
 
 to download all media images from a user 
 
