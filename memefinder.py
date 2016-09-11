@@ -1,18 +1,52 @@
-import hashlib
 import os
+import sys
 import argparse
 from operator import itemgetter
+from PIL import Image
 
 hash_list = []
 file_list = []
+
+def dhash(image, hash_size = 8):
+    # Grayscale and shrink the image in one step.
+    image = image.convert('L').resize(
+        (hash_size + 1, hash_size),
+        Image.ANTIALIAS,
+    )
+
+    pixels = list(image.getdata())
+
+    # Compare adjacent pixels.
+    difference = []
+    for row in xrange(hash_size):
+        for col in xrange(hash_size):
+            pixel_left = image.getpixel((col, row))
+            pixel_right = image.getpixel((col + 1, row))
+            difference.append(pixel_left > pixel_right)
+
+    # Convert the binary array to a hexadecimal string.
+    decimal_value = 0
+    hex_string = []
+    for index, value in enumerate(difference):
+        if value:
+            decimal_value += 2**(index % 8)
+        if (index % 8) == 7:
+            hex_string.append(hex(decimal_value)[2:].rjust(2, '0'))
+            decimal_value = 0
+
+    return ''.join(hex_string)
 
 def find_dupes(path, cross):
     for dirname, dirnames, filenames in os.walk(path):
         for filename in filenames:
             file_path = os.path.join(dirname, filename)
-            image_file = open(file_path).read()
-            hash_list.append(hashlib.md5(image_file).hexdigest())
-            file_list.append(file_path)
+            try:
+                image_file = Image.open(file_path)
+                hash_list.append(dhash(image_file))
+                file_list.append(file_path)
+            except Exception as e:
+                print('TROUBLE LOADING IMAGE HASH ', e)
+
 
     N = len(hash_list)
     dupes = []
@@ -80,6 +114,10 @@ if __name__ == '__main__':
 
     dupes = find_dupes(args['directory'], args['cross'])
 
+    if len(dupes) == 0:
+        print('found no duplicates')
+        sys.exit()
+
     print('')
     print('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
     dupe_counter = {}
@@ -98,8 +136,4 @@ if __name__ == '__main__':
     dupes_list = list(map(add_count, set(dupes)))
     dupes_filtered = sorted(dupes_list, key=itemgetter('count'))
     dupes_filtered.reverse()
-
-    for d in dupes_filtered:
-        print('FOUND DUPE!')
-        print(d['count'], ' >>> ', d['file'])
 
