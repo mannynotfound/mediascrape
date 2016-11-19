@@ -172,7 +172,11 @@ def _parse_tweet(tweetElement):
     return tweet
 
 def _parse_tweet_entites(element, entities):
-    tags = element.cssselect('a.twitter-hashtag, a.twitter-cashtag, a.twitter-atreply, a.twitter-timeline-link')
+    try:
+        tags = element.cssselect('a.twitter-hashtag, a.twitter-cashtag, a.twitter-atreply, a.twitter-timeline-link')
+    except Exception as e:
+        tags = []
+        pass
     if len(tags) > 0:
         for tag in tags:
             classes = tag.get('class').split(' ')
