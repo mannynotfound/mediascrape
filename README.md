@@ -8,6 +8,19 @@ Download a Twitter user's media easily, no API keys needed.
 
 mediascrape requires no API credentials and instead relies on public endpoints combined with HTML parsing from [lxml](http://lxml.de/) to extract data.
 
+## dependencies
+
+* Python 3
+  * Installation instructions and downloads for your OS can be found here: [https://www.python.org/downloads/](https://www.python.org/downloads/)
+
+* Python module dependencies:
+  * request
+    * `pip3 install request`
+  * lxml
+    * `pip3 install lxml`
+  * cssselect
+    * `pip3 install cssselect`
+
 ## usage
 
 to download all media images from a user 
