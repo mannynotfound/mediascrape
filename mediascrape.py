@@ -3,7 +3,7 @@ import os
 import urllib.request
 import argparse
 
-def mediascrape(user):
+def mediascrape(user, output):
     TwitterPageIterator = TwitterMediaSearch.TwitterPager(title = user).get_iterator(user)
 
     all_media = []
@@ -21,7 +21,11 @@ def mediascrape(user):
 
     download_count = 0
     path = os.path.dirname(os.path.realpath(__file__))
-    dump_path = path + '/media'
+    if output:
+        dump_path = output
+    else:
+        dump_path = path + '/media'
+
     dump_dir = '{0}/{1}'.format(dump_path, user)
     if not os.path.exists(dump_dir):
         os.makedirs(dump_dir)
@@ -45,7 +49,9 @@ if __name__ == '__main__':
     # parse cli arguments
     ap = argparse.ArgumentParser()
     ap.add_argument('-u', '--user', help = 'user to scrape')
+    ap.add_argument('-o', '--output', help = 'directory to save media to')
     args = vars(ap.parse_args())
     user = args['user']
-    mediascrape(user)
+    output = args['output']
+    mediascrape(user, output)
 

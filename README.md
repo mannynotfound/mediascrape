@@ -39,7 +39,13 @@ to download all media images from a list of users, make a line-seperated `.txt` 
 
 eg: `python3 multi_mediascrape.py -f /home/me/tweetscrape/models/names.txt`
 
-this will save all files to a directory of `/media/[user]/*`
+by default this will save all files to a directory of `/media/[user]/*`
+
+If you wish to specify a directory to save media into you can do with with the `-o` or `--output` options like this:
+
+`python3 mediascrape.py -u [user] -o [output directory]`
+
+When using `-o` remember to specify an absolute path.
 
 ## memefinder
 
