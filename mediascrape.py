@@ -20,7 +20,6 @@ def mediascrape(user, output):
             # print("{0} id: {1} text: {2}".format(count, tweet['id_str'], tweet['text']))
             count += 1
 
-    download_count = 0
     path = os.path.dirname(os.path.realpath(__file__))
     if output:
         dump_path = output
@@ -31,24 +30,34 @@ def mediascrape(user, output):
     if not os.path.exists(dump_dir):
         os.makedirs(dump_dir)
 
+    # extract all nested media
+    img_urls = []
     for m in all_media:
-        current_media = m.get('entities', {}).get('media', [])
+        media = m.get('entities', {}).get('media', [])
+        imgs = list(filter(lambda x: x.get('type') == 'photo', media))
+        for idx, img in enumerate(imgs):
+            img_urls.append({
+                'url': img.get('media_url'),
+                'filename': '{}_{}_{}.jpg'.format(user, m.get('id_str'), idx),
+            })
 
-        for idx, cm in enumerate(current_media):
-            if cm.get('type') == 'photo':
-                download_count += 1
-                url = cm.get('media_url')
-                filename = '{0}_{1}.jpg'.format(user, m.get('id_str'))
-                # only save the photo if it does not already exist
-                photo_already_exists = Path(dump_dir + "/" + filename)
-                if photo_already_exists.is_file():
-                    print('fetching image {0} - already exists, skipping...'.format(download_count))
-                else:
-                    print('fetching image {0} - {1}'.format(download_count, url))
-                    try:
-                        urllib.request.urlretrieve(url, '{0}/{1}'.format(dump_dir, filename))
-                    except Exception as e:
-                        print(e)
+
+    # fetch + save images
+    total = len(img_urls)
+    for idx, img in enumerate(img_urls):
+        url = img.get('url')
+        filename = img.get('filename')
+        # only save the photo if it does not already exist
+        photo_already_exists = Path(dump_dir + "/" + filename)
+        if photo_already_exists.is_file():
+            print('fetching image {} - already exists, skipping...'.format(idx + 1))
+        else:
+            print('fetching image {}/{} - {}'.format(idx + 1, total, url))
+            try:
+                urllib.request.urlretrieve(url, '{0}/{1}'.format(dump_dir, filename))
+            except Exception as e:
+                print(e)
+
 
 if __name__ == '__main__':
     # parse cli arguments
