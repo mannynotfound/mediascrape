@@ -34,7 +34,7 @@ def mediascrape(user, output):
     img_urls = []
     for m in all_media:
         media = m.get('entities', {}).get('media', [])
-        imgs = list(filter(lambda x: x.get('type') == 'photo', media))
+        imgs = [x for x in media if x.get('type') == 'photo']
         for idx, img in enumerate(imgs):
             img_urls.append({
                 'url': img.get('media_url'),
