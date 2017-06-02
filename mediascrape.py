@@ -2,6 +2,7 @@ import TwitterMediaSearch
 import os
 import urllib.request
 import argparse
+from pathlib import Path
 
 def mediascrape(user, output):
     TwitterPageIterator = TwitterMediaSearch.TwitterPager(title = user).get_iterator(user)
@@ -38,12 +39,16 @@ def mediascrape(user, output):
                 download_count += 1
                 url = cm.get('media_url')
                 filename = '{0}_{1}.jpg'.format(user, m.get('id_str'))
-                print('fetching image {0} - {1}'.format(download_count, url))
-                try:
-                    urllib.request.urlretrieve(url, '{0}/{1}'.format(dump_dir, filename))
-                except Exception as e:
-                    print(e)
-
+                # only save the photo if it does not already exist
+                photo_already_exists = Path(dump_dir + "/" + filename)
+                if photo_already_exists.is_file():
+                    print('fetching image {0} - already exists, skipping...'.format(download_count))
+                else:
+                    print('fetching image {0} - {1}'.format(download_count, url))
+                    try:
+                        urllib.request.urlretrieve(url, '{0}/{1}'.format(dump_dir, filename))
+                    except Exception as e:
+                        print(e)
 
 if __name__ == '__main__':
     # parse cli arguments
