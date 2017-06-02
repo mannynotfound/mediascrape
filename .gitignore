@@ -6,3 +6,4 @@ models/*
 !models/empty.txt
 config*
 accounts*
+__pycache__/
