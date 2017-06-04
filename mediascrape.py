@@ -5,34 +5,26 @@ import argparse
 from pathlib import Path
 
 def mediascrape(user, output):
+    print('Fetching user media...')
+
     TwitterPageIterator = TwitterMediaSearch.TwitterPager(title = user).get_iterator(user)
 
-    all_media = []
-    count = 0
-
+    twitter_media = []
     for page in TwitterPageIterator:
         for media in page['media']:
-            print(count, ' ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– ')
-            print(media)
-            all_media.append(media)
-            print('')
-            print('')
-            # print("{0} id: {1} text: {2}".format(count, tweet['id_str'], tweet['text']))
-            count += 1
+            twitter_media.append(media)
+        print('Fetched {} media tweets..'.format(len(twitter_media)))
 
     path = os.path.dirname(os.path.realpath(__file__))
-    if output:
-        dump_path = output
-    else:
-        dump_path = path + '/media'
+    default_output = path + '/media'
 
-    dump_dir = '{0}/{1}'.format(dump_path, user)
+    dump_dir = '{0}/{1}'.format(output or default_output, user)
     if not os.path.exists(dump_dir):
         os.makedirs(dump_dir)
 
     # extract all nested media
     img_urls = []
-    for m in all_media:
+    for m in twitter_media:
         media = m.get('entities', {}).get('media', [])
         imgs = [x for x in media if x.get('type') == 'photo']
         for idx, img in enumerate(imgs):
@@ -41,22 +33,27 @@ def mediascrape(user, output):
                 'filename': '{}_{}_{}.jpg'.format(user, m.get('id_str'), idx),
             })
 
-
     # fetch + save images
     total = len(img_urls)
+    print('')
+    print('Found {} images!'.format(total))
+    print('')
     for idx, img in enumerate(img_urls):
         url = img.get('url')
         filename = img.get('filename')
         # only save the photo if it does not already exist
-        photo_already_exists = Path(dump_dir + "/" + filename)
-        if photo_already_exists.is_file():
-            print('fetching image {} - already exists, skipping...'.format(idx + 1))
+        photo_already_exists = Path(dump_dir + "/" + filename).is_file()
+        if photo_already_exists:
+            print('Skipping image {} - already exists!'.format(idx + 1))
         else:
-            print('fetching image {}/{} - {}'.format(idx + 1, total, url))
+            print('Fetching image {}/{} - {}'.format(idx + 1, total, url))
             try:
                 urllib.request.urlretrieve(url, '{0}/{1}'.format(dump_dir, filename))
             except Exception as e:
                 print(e)
+
+    print('')
+    print('Done scraping media!')
 
 
 if __name__ == '__main__':
@@ -68,4 +65,3 @@ if __name__ == '__main__':
     user = args['user']
     output = args['output']
     mediascrape(user, output)
-

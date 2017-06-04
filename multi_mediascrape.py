@@ -21,5 +21,4 @@ with io.open(filename, encoding='utf-8') as f:
     name_list = f.read().splitlines()
 
 for name in name_list:
-    print('SCRAPING ', name)
     mediascrape(name, output)
