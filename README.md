@@ -29,7 +29,13 @@ to download all media images from a user
 
 eg: `python3 mediascrape.py -u lilbthebasedgod`
 
-this will save all files to a directory of `/media/[user]/*`
+by default this will save all files to a directory of `/media/[user]/*`
+
+If you wish to specify a directory to save media into you can do with with the `-o` or `--output` options like this:
+
+`python3 mediascrape.py -u [user] -o [output directory]`
+
+When using `-o` remember to specify an absolute path.
 
 ## multi\_mediascrape
 
@@ -43,7 +49,7 @@ by default this will save all files to a directory of `/media/[user]/*`
 
 If you wish to specify a directory to save media into you can do with with the `-o` or `--output` options like this:
 
-`python3 mediascrape.py -u [user] -o [output directory]`
+`python3 multi_mediascrape.py -f [txt file of names] -o [output directory]`
 
 When using `-o` remember to specify an absolute path.
 
