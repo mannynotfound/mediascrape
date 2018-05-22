@@ -47,7 +47,7 @@ def search(user, max_position=None, session=None):
 def prepare_request(url, params):
     payload_str = "&".join("%s=%s" % (k,v) for k,v in params.items())
     headers = {
-        'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/29.0.1547.65 Chrome/29.0.1547.65 Safari/537.36',
+        'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/66.0.3359.139 Chrome/66.0.3359.139 Safari/537.36',
         'Accept-Encoding' : 'gzip, deflate, sdch, br'
         }
     cookie = {}
