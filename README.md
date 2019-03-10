@@ -15,7 +15,7 @@ mediascrape requires no API credentials and instead relies on public endpoints c
 
 * Python module dependencies:
   * request
-    * `pip3 install request`
+    * `pip3 install requests`
   * lxml
     * `pip3 install lxml`
   * cssselect
